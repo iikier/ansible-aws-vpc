@@ -49,20 +49,13 @@
       set_fact:
         instance_exists: "{{ existing_instances.instances | length > 0 }}"
 
-    - name: Get AMI ID
-      ec2_ami_facts:
-        region: "{{ region }}"
-        filters:
-          name: "{{ bastion_ami }}"
-      register: ami_facts
-
     - name: Creating new instance if it doesn't exist
       when: not instance_exists
       community.aws.ec2_instance:
         key_name: vprofile-key
         region: "{{ region }}"
         instance_type: t2.micro
-        image_id: "{{ ami_facts.images | first | default({}).id }}"
+        image_id: "ami-0bb84b8ffd87024d8"
         wait: yes
         wait_timeout: 300
         tags:
