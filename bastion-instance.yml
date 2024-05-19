@@ -54,6 +54,6 @@
           Project: Vprofile
           Owner: Devops Team
         group_id: "{{BastionSG_out.group_id}}"
-        vpc_subnet_id: "{{pubsub1id}}"
+        vpc_subnet_id: "subnet-00c51f66573e327a3"
       register: bastionHost_out
          
