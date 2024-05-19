@@ -39,20 +39,33 @@
     - name: Creating Bastion Host
       community.aws.ec2_instance:
         key_name: vprofile-key
-        region: "{{region}}"
+        region: "{{ region }}"
         instance_type: t2.micro
-        image: "{{bastion_ami}}"
+        image: "{{ bastion_ami }}"
         wait: yes
         wait_timeout: 300
-        instance_tags: 
-          name: "Bastion_host"
-          Project: Vprofile
-          Owner: Devops Team
-        exact_count: 1
-        count_tag:
-          name: "Bastion_host"
-          Project: Vprofile
-          Owner: Devops Team
-        group_id: "{{BastionSG_out.group_id}}"
-        vpc_subnet_id: "subnet-00c51f66573e327a3"
+      filters:
+        "tag:Name": "Bastion_host"
+        "tag:Project": "Vprofile"
+        "tag:Owner": "Devops Team"
       register: bastionHost_out
+
+    - name: Check if instance already exists
+      set_fact:
+        instance_exists: "{{ bastionHost_out.instances | length > 0 }}"
+
+    - name: Creating new instance if it doesn't exist
+      when: not instance_exists
+      community.aws.ec2_instance:
+        key_name: vprofile-key
+        region: "{{ region }}"
+        instance_type: t2.micro
+        image: "{{ bastion_ami }}"
+        wait: yes
+        wait_timeout: 300
+      tags:
+        name: "Bastion_host"
+        Project: Vprofile
+        Owner: Devops Team
+      vpc_subnet_id: "subnet-00c51f66573e327a3"
+      register: new_bastionHost_out
