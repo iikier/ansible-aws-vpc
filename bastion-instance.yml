@@ -52,6 +52,7 @@
     - name: Creating new instance if it doesn't exist
       when: not instance_exists
       community.aws.ec2_instance:
+        name: Bastion Host
         key_name: actions
         region: "{{ region }}"
         instance_type: t2.micro
