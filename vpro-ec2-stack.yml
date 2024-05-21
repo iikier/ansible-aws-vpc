@@ -65,3 +65,92 @@
         rules: 
           - proto: all
             group_id: "{{vproStackSG_out.group_id}}"
+
+    - name: Creating Nginx web01
+      amazon.aws.ec2_instance:
+        key_name: actions
+        region: "{{ region }}"
+        instance_type: t2.micro
+        image_id: "{{ nginx_ami }}"
+        exact_count: 1
+        wait: yes
+        wait_timeout: 300
+        tags:
+          Name: "web01"
+          Project: Vprofile
+          Owner: Devops Team
+        group_id: "{{vproStackSG_out.group_id}}"
+        vpc_subnet_id: "{{privsub1id}}"
+      register: web01_out
+
+    - name: Creating tomcat app01
+      amazon.aws.ec2_instance:
+        key_name: actions
+        region: "{{ region }}"
+        instance_type: t2.micro
+        image_id: "{{ tomcat_ami }}"
+        exact_count: 1
+        wait: yes
+        wait_timeout: 300
+        tags:
+          Name: "app01"
+          Project: Vprofile
+          Owner: Devops Team
+        group_id: "{{vproStackSG_out.group_id}}"
+        vpc_subnet_id: "{{privsub1id}}"
+      register: app01_out
+
+    - name: Creating memcache mc01
+      amazon.aws.ec2_instance:
+        key_name: actions
+        region: "{{ region }}"
+        instance_type: t2.micro
+        image_id: "{{ memcache_ami }}"
+        exact_count: 1
+        wait: yes
+        wait_timeout: 300
+        tags:
+          Name: "mc01"
+          Project: Vprofile
+          Owner: Devops Team
+        group_id: "{{vproStackSG_out.group_id}}"
+        vpc_subnet_id: "{{privsub1id}}"
+      register: mc01_out
+
+    - name: Creating rabbitmq rmq01
+      amazon.aws.ec2_instance:
+        key_name: actions
+        region: "{{ region }}"
+        instance_type: t2.micro
+        image_id: "{{ rmq_ami }}"
+        exact_count: 1
+        wait: yes
+        wait_timeout: 300
+        tags:
+          Name: "rmq01"
+          Project: Vprofile
+          Owner: Devops Team
+        group_id: "{{vproStackSG_out.group_id}}"
+        vpc_subnet_id: "{{privsub1id}}"
+      register: rmq01_out
+
+    - name: Creating Mysql db01
+      amazon.aws.ec2_instance:
+        key_name: actions
+        region: "{{ region }}"
+        instance_type: t2.micro
+        image_id: "{{ mysql_ami }}"
+        exact_count: 1
+        wait: yes
+        wait_timeout: 300
+        tags:
+          Name: "db01"
+          Project: Vprofile
+          Owner: Devops Team
+        group_id: "{{vproStackSG_out.group_id}}"
+        vpc_subnet_id: "{{privsub1id}}"
+      register: db01_out
+    
+    - debug: 
+        var: db01_out
+        
