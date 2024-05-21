@@ -67,7 +67,7 @@
             group_id: "{{vproStackSG_out.group_id}}"
 
     - name: Creating Nginx web01
-      amazon.aws.ec2_instance:
+      community.aws.ec2_instance:
         key_name: actions
         region: "{{ region }}"
         instance_type: t2.micro
@@ -84,7 +84,7 @@
       register: web01_out
 
     - name: Creating tomcat app01
-      amazon.aws.ec2_instance:
+      community.aws.ec2_instance:
         key_name: actions
         region: "{{ region }}"
         instance_type: t2.micro
@@ -101,7 +101,7 @@
       register: app01_out
 
     - name: Creating memcache mc01
-      amazon.aws.ec2_instance:
+      community.aws.ec2_instance:
         key_name: actions
         region: "{{ region }}"
         instance_type: t2.micro
@@ -118,7 +118,7 @@
       register: mc01_out
 
     - name: Creating rabbitmq rmq01
-      amazon.aws.ec2_instance:
+      community.aws.ec2_instance:
         key_name: actions
         region: "{{ region }}"
         instance_type: t2.micro
@@ -135,7 +135,7 @@
       register: rmq01_out
 
     - name: Creating Mysql db01
-      amazon.aws.ec2_instance:
+      community.aws.ec2_instance:
         key_name: actions
         region: "{{ region }}"
         instance_type: t2.micro
