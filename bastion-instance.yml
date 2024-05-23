@@ -13,7 +13,7 @@
     - name: Create vprofile ec2 key
       ec2_key:
         name: vprofile-key
-        region: "us-east-1"
+        region: "{{region}}"
       register: key_out
 
     - name: Save private key into file bastion-key.pem
@@ -27,7 +27,7 @@
       ec2_group:
         name: Bastion-host-sg        
         description: Allow port 22 from everywhere and all port within sg
-        region: "us-east-1"
+        region: "{{region}}"
         vpc_id: "{{vpcid}}"
         rules: 
           - proto: tcp
@@ -38,7 +38,7 @@
 
     - name: Get existing instances
       community.aws.ec2_instance_info:
-        region: "us-east-1"
+        region: "{{ region }}"
         filters:
           "tag:Name": "Bastion_host"
           "tag:Project": "Vprofile"
@@ -54,7 +54,7 @@
       community.aws.ec2_instance:
         name: Bastion Host
         key_name: actions
-        region: "us-east-1"
+        region: "{{ region }}"
         instance_type: t2.micro
         image_id: "{{ bastion_ami }}"
         wait: yes
