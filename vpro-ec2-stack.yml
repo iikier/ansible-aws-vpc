@@ -84,6 +84,9 @@
         vpc_subnet_id: "{{privsub1id}}"
       register: web01_out
 
+    - debug: 
+        var: web01_out.instances[0].instance_id
+
     - name: Creating tomcat app01
       community.aws.ec2_instance:
         key_name: actions
@@ -165,7 +168,7 @@
         region: "us-east-1"
         state: present
         instance_ids:
-          - "{{web01_out.instances.instance_id}}"
+          - "{{web01_out.instances[0].instance_id}}"
         purge_instance_ids: true
         security_group_ids: "{{vproELBSG_out.group.id}}"
         subnets:
@@ -177,19 +180,19 @@
             load_balancer_port: 80
             instance_port: 80
 
-    # - name: Insert/Update Host IP & Name in file provision-stack/group_vars/hostsip
-    #   blockinfile:
-    #     path: provision-stack/group_vars/hostsip
-    #     block: |
-    #       web01_ip: {{ web01_out.tagged_instances[0].private_ip }}
-    #       app01_ip: {{ web01_out.tagged_instances[0].private_ip }}
-    #       rqm01_ip: {{ web01_out.tagged_instances[0].private_ip }}
-    #       mc01_ip: {{ web01_out.tagged_instances[0].private_ip }}
-    #       db01_ip: {{ web01_out.tagged_instances[0].private_ip }}
+    - name: Insert/Update Host IP & Name in file provision-stack/group_vars/hostsip
+      blockinfile:
+        path: provision-stack/group_vars/hostsip
+        block: |
+          web01_ip: {{ web01_out.tagged_instances[0].private_ip }}
+          app01_ip: {{ web01_out.tagged_instances[0].private_ip }}
+          rqm01_ip: {{ web01_out.tagged_instances[0].private_ip }}
+          mc01_ip: {{ web01_out.tagged_instances[0].private_ip }}
+          db01_ip: {{ web01_out.tagged_instances[0].private_ip }}
 
-    # - name: Copy login key to provision_stack directory
-    #   copy: 
-    #     src: loginkey_pro.pem
-    #     dest: provision-stack/loginkey_vpro.pem
-    #     mode: '0400'
+    - name: Copy login key to provision_stack directory
+      copy: 
+        src: loginkey_pro.pem
+        dest: provision-stack/loginkey_vpro.pem
+        mode: '0400'
         
