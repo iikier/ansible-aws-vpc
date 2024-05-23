@@ -6,6 +6,9 @@
   tasks:
     - name: Import VPC setup Variable
       include_vars: vars/vpc_setup
+    
+    - name: Import output vars
+      include_vars: vars/output_vars
 
     - name: Create vprofile ec2 key
       ec2_key:
@@ -25,7 +28,7 @@
         name: Bastion-host-sg        
         description: Allow port 22 from everywhere and all port within sg
         region: "{{region}}"
-        vpc_id: "vpc-06e34bfc30b919bfa"
+        vpc_id: "{{vpcid}}"
         rules: 
           - proto: tcp
             from_port: 22
